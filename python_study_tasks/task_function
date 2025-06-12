@@ -1,0 +1,10 @@
+#11. все элементы, после которых стоит положительное число, увеличить в 3 раза.
+def triple_if_followed_by_positive(array):
+    for i in range(len(array) - 1):
+        if array[i + 1] > 0:
+            array[i] *= 3
+
+
+array = [1, 2, -3, 4, 5, -6, 7]
+triple_if_followed_by_positive(array)
+print(array)

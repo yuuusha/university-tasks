@@ -1,0 +1,67 @@
+{
+  "constellations": [
+    {
+      "name": "Близнецы",
+      "latin": "Gemini",
+      "abbrev": "Gem",
+      "square": 514,
+      "stars": [
+        {
+          "name": "Кастор",
+          "brightness": 3014
+        },
+        {
+          "name": "Поллукс",
+          "brightness": 32
+        }
+      ],
+      "neighbours": [
+        "Аурига",
+        "Рак",
+        "Малый Пес"
+      ]
+    },
+    {
+      "name": "Гидра",
+      "latin": "Hydra",
+      "abbrev": "Hya",
+      "square": 1303,
+      "stars": [
+        {
+          "name": "Альфард",
+          "brightness": 32
+        },
+        {
+          "name": "Фелис",
+          "brightness": 721
+        }
+      ],
+      "neighbours": [
+        "Весы",
+        "Рак",
+        "Дева"
+      ]
+    },
+    {
+      "name": "Орион",
+      "latin": "Orion",
+      "abbrev": "Ori",
+      "square": 594,
+      "stars": [
+        {
+          "name": "Бетельгейзе",
+          "brightness": 126000
+        },
+        {
+          "name": "Ригель",
+          "brightness": 120000
+        }
+      ],
+      "neighbours": [
+        "Близнецы",
+        "Телец",
+        "Заяц"
+      ]
+    }
+  ]
+}
