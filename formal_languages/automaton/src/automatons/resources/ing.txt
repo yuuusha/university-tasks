@@ -1,0 +1,11 @@
+type: dfa
+states: none, i, in, ing
+alphabet: a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+start: none
+final: ing
+
+table
+none none none none none none none none i none none none none none none none none none none none none none none none none none
+none none none none none none none none i none none none none in none none none none none none none none none none none none
+none none none none none none ing none i none none none none none none none none none none none none none none none none none
+none none none none none none none none i none none none none none none none none none none none none none none none none none

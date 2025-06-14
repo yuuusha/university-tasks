@@ -1,0 +1,13 @@
+type: nfa
+states: A, B, C, D, E, F
+alphabet: 0, 1
+start: A
+final: B, D, E
+
+table
+E B
+- C
+- D
+- -
+F C,D
+D -

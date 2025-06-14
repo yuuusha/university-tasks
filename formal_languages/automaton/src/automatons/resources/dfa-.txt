@@ -1,0 +1,11 @@
+type: dfa
+states: A, B, C, D
+alphabet: 0, 1
+start: A
+final: D
+
+table
+D A
+D A
+D A
+- -

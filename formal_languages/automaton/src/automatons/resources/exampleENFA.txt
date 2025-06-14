@@ -1,0 +1,13 @@
+type: enfa
+states: A, B, C, D, E, F
+alphabet: 0, 1, ε
+start: A
+final: D
+
+table
+E B -
+- C D
+- D -
+- - -
+F - B,C
+D - -
