@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE Messenger</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-box {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin: 8px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .user-label {
+            color: #666;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset = utf-8" />
+</head>
+<body>
+<div class="container">
+    <div>
+        <input type="text" id="username" placeholder="Ваш логин">
+        <select id="roomSelect" onchange="switchRoom()">
+            <option value="general">Общий чат</option>
+            <option value="random">Флудилка</option>
+        </select>
+    </div>
+
+    <div class="chat-box">
+        <h3>Чат</h3>
+        <div id="messages"></div>
+    </div>
+
+    <input type="text" id="messageInput" placeholder="Сообщение">
+    <button onclick="sendMessage()">Отправить</button>
+</div>
+
+<script>
+    let currentRoom = 'general';
+    let eventSource = null;
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedUser = localStorage.getItem('chatUser');
+        if(savedUser) document.getElementById('username').value = savedUser;
+        connectToRoom(currentRoom);
+    });
+
+
+    function connectToRoom(room) {
+        if(eventSource) eventSource.close();
+
+        fetch(`/history?room=${room}`)
+            .then(r => r.json())
+            .then(messages => {
+                document.getElementById('messages').innerHTML =
+                    messages.map(m => `
+                            <div class="message">
+                                <span class="user-label">${m.user}:</span>${m.text}
+                            </div>
+                        `).join('');
+            });
+
+        eventSource = new EventSource(`/subscribe?room=${room}`);
+        eventSource.onmessage = e => {
+            if (e.data === "connected") return;
+            try {
+                const msg = JSON.parse(e.data);
+                addMessage(msg.user, msg.text);
+            } catch (err) {
+                console.error("Ошибка обработки SSE-сообщения", err);
+            }
+        };
+
+    }
+
+    function switchRoom() {
+        currentRoom = document.getElementById('roomSelect').value;
+        connectToRoom(currentRoom);
+    }
+
+    function addMessage(user, text) {
+        const messagesDiv = document.getElementById('messages');
+        const msgElement = document.createElement('div');
+        msgElement.classList.add('message');
+        msgElement.innerHTML = `<span class="user-label">${user}:</span> ${text}`;
+        messagesDiv.appendChild(msgElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+
+    async function sendMessage() {
+        const user = document.getElementById('username').value.trim();
+        const text = document.getElementById('messageInput').value.trim();
+
+        if (user && text) {
+            localStorage.setItem('chatUser', user);
+
+            await fetch('/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, text, room: currentRoom })
+            });
+
+            document.getElementById('messageInput').value = '';
+        }
+    }
+
+
+    document.getElementById('messageInput').addEventListener('keypress', e => {
+        if(e.key === 'Enter') sendMessage();
+    });
+</script>
+</body>
+</html>
